@@ -195,8 +195,8 @@ class Model{
 }
 
 class View {
-    mainHTML(){
-
+    bodyHTML(){
+        
     }
     selecterHtml(labelTitle,models){
         //label
@@ -206,7 +206,7 @@ class View {
         //label
         //input . w
     }
-    tableHtml(labelTitle,){
+    listHtml(labelTitle,callback){
 
     }
     page404Html(){

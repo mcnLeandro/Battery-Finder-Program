@@ -11,31 +11,86 @@
     <link rel="stylesheet" href="style.css">
     <title>Battery Finder Program</title>
 </head>
-<body>
-    <header class="p-2 bg-dark" >
+<body class="d-flex flex-column">
+    <header class="p-2 bg-dark">
         <h2 class="white" >Battery Finder Program</h2>
     </header>
-    <main >
-        <section class="container shadow my-3 py-3">
-            <div class="row">
+    <main>
+        <section class="container shadow my-5 py-3">
+            <div class="row mt-5">
                 <div class=" col-12">
-                    <h2 for="">Step1 : select your brand</h2>
-                    <div class=" col-12">
-                        <button type="button" class="btn btn-lg btn-light dropdown-toggle dropdown-toggle-split p-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="">Model</span>
+                    <div class="col-12">
+                        <h2 class="">${Selecter}</h2>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="button" class="col-12 col-md-6 p-3 item-left btn btn-lg btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-2vw ">Model</span>
                         </button>
-                        <div id="brandSelect"class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <div class="dropdown-item ">Model</div>
-                            <div class="dropdown-item ">Another action</div>
-                            <div class="dropdown-item ">Something else here</div>
+                        <div id="brandSelect"class="dropdown-menu col-11" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-item text-2vw">Model</div>
+                            <div class="dropdown-item text-2vw">Another action</div>
+                            <div class="dropdown-item text-2vw">Something else here</div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row mt-5">
+                <div class=" col-12">
+                    <div class="col-12">
+                        <h2 class="">${ParamaterInput}</h2>
+                    </div>
+                    <div class="col-12 mt-3  d-flex">
+                        <input type="text" class="col-3 col-md-1 bg-gray text-2vw p-1" value="0">
+                        <span class="ml-2 text-2vw">W</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class=" col-12">
+                    <div class="col-12">
+                        <h2 class="">${List}</h2>
+                    </div>
+                    <div class="col-12 mt-3  d-flex text-2vw">
+                        <table class="table table-striped col-12">
+                            <thead>
+                              <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">Battery Name</th>
+                                <th scope="col">Estimated</th>
+                                <th scope="col">Handle</th>
+                              </tr>
+                            </thead>
+                            <tbody class="">
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td><button type="button" class="btn btn-primary">Show</button></td>
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td><button type="button" class="btn btn-primary">Show</button></td>
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td><button type="button" class="btn btn-primary">Show</button></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </main>
-    <footer>
-
+    <footer class="mt-auto mb-5 p-3">
+        <div class="d-flex justify-content-center">
+            <small><a href="https://twitter.com/leandro83g" target="_blank">Copyright ©️ Leandro,inc　All Rights Unreserved</a></small>
+        </div>
     </footer>
     
     <script src="script.js" async></script>

@@ -1,3 +1,12 @@
 h2{
     font-size: 3vw;
 }
+.text-2vw{
+    font-size: 2vw;
+}
+.white{color: white;}
+
+body{
+    width: 100vw;
+    height: 100vh;
+}
