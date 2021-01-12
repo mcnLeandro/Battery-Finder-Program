@@ -1,12 +1,16 @@
-h2{
-    font-size: 3vw;
-}
-.text-2vw{
-    font-size: 2vw;
-}
-.white{color: white;}
-
 body{
     width: 100vw;
     height: 100vh;
 }
+h2{
+    font-size: 3vw;
+}
+
+.ultra-large{
+    font-size: 10vw;
+}
+.text-2vw{
+    font-size: 2vw;
+}
+
+.white{color: white;}

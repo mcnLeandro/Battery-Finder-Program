@@ -195,41 +195,158 @@ class Model{
 }
 
 class View {
-    bodyHTML(){
-        
+    bodyHtml(){
+        let bodyHtml = 
+        `   
+            <header class="p-2 bg-dark">
+                <h2 class="white" >Battery Finder Program</h2>
+            </header>
+            <main>
+                <section id="mainPage" class="container shadow my-5 py-3">
+                </section>
+                <section id="extraPage" class="container shadow my-5 py-3 d-none">
+                </section>
+            </main>
+            <footer class="mt-auto mb-5 p-3">
+                <div class="d-flex justify-content-center">
+                    <small>Copyright ©️ <a href="https://twitter.com/leandro83g" target="_blank">Leandro,inc</a>　All <a href="https://twitter.com/leandro83g" target="_blank">Rights</a> Unreserved</small>
+                </div>
+            </footer>
+        `;
+
+        return bodyHtml;
     }
+
     selecterHtml(labelTitle,models){
-        //label
-        //selecter
+        let selecerHtml = 
+        `
+            <div class="row mt-5">
+                <div class=" col-12">
+                    <div class="col-12">
+                        <h2>${labelTitle}</h2>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="button" class="col-12 col-md-6 p-3 item-left btn btn-lg btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-2vw ">Model</span>
+                        </button>
+                        <div id="${models}Selecter" class="dropdown-menu col-11" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-item text-2vw">Model</div>
+                            <div class="dropdown-item text-2vw">Another action</div>
+                            <div class="dropdown-item text-2vw">Something else here</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return selecerHtml;
     }
     parameterInputHtml(labelTitle,unit){
-        //label
-        //input . w
-    }
-    listHtml(labelTitle,callback){
+        let parameterInputHtml = 
+        `
+            <div class="row mt-5">
+                <div class=" col-12">
+                    <div class="col-12">
+                        <h2 class="">${labelTitle}</h2>
+                    </div>
+                    <div class="col-12 mt-3  d-flex">
+                        <input id="${unit}Input" type="text" class="col-3 col-md-1 bg-gray text-2vw p-1" value="0">
+                        <span class="ml-2 text-2vw">${unit}</span>
+                    </div>
+                </div>
+            </div>
+        `;
 
+        return parameterInputHtml;
     }
+
+    listHtml(labelTitle,theadList,modelList,f){
+        // let listHtml = 
+        // `
+        //     <div class="row mt-5">
+        //         <div class=" col-12">
+        //             <div class="col-12">
+        //                 <h2 class="">${labelTitle}</h2>
+        //             </div>
+        //             <div class="col-12 mt-3  d-flex text-2vw">
+        //                 <table class="table table-striped col-12">
+        //                     <thead>
+        //                       <tr>
+        // `;
+        // for(let i = 0 ; i < theadList.length ; i++){
+
+        //     listHtml +=
+        //     `
+        //         <th scope="col">${theadList[i]}</th>
+        //     `;
+
+        // }
+
+        // listHtml += 
+        // `
+        //     </tr>
+        // </thead>
+        // <tbody>
+        //     <tr>
+        // `;
+
+        // for(let i = 0 ; i < modelList ; i++){
+        //     let currObj = modelList()
+        //     if(!f)continue;
+        //     listHtml += 
+            
+        //     `              
+        //         <th scope="row">1</th>
+        //         <td>Mark</td>
+        //         <td>Otto</td>
+        //         <td><button type="button" class="btn btn-primary">Show</button></td>
+            
+        //     `
+        // }
+        
+        // listHtml+=
+        // `
+        //                       </tr>
+        //                     </tbody>
+        //                   </table>
+        //             </div>
+        //         </div>
+        //     </div>
+        // `
+
+        // return listHtml;
+    }
+
     page404Html(){
+        let page404Html = 
+        `
+            <div class="d-flex justify-content-center text-center">
+                <div  class="col-6">
+                    <h1 class="ultra-large ">404</h1>
+                    <h2>NOT FOUND</h2>
+                    <p>Soory.<br> This page doesn't exsit yet, so go back to top page, and enjoy the rest of application service :)</p>
 
+                    <button type="button" class="btn btn-primary w-100 my-3">top page</button>
+                </div>
+            </div>
+        `;
+
+        return page404Html;
     }
 }
 
 class Controller{
     target = document.querySelector("body");
-    // <header class="p-2 bg-dark" >
+    // <header class="p-2 bg-dark">
     //     <h2 class="white" >Battery Finder Program</h2>
     // </header>
     // <main>
-    //     <section class="container shadow my-3 py-3">
-    //         <div class="row">
-    //             <div class=" col-12">
-    //          
-    //             </div>
-    //         </div>
+    //     <section id="mainPage" class="container shadow my-5 py-3">
+    //     </section>
+    //     <section id="extraPage" class="container shadow my-5 py-3">
     //     </section>
     // </main>
-    // <footer>
-    //
+    // <footer class="mt-auto mb-5 p-3">
     // </footer>
     
     //main   = document.querySelector("main");//???
@@ -243,9 +360,6 @@ class Controller{
         ele.classList.add("d-block");
     }
     toggleDisplay(ele1, ele2){
-        // ele1が表示されているかどうかチェックします。
-        // ele1とele2を切替えます。
-        // classList.containはクラスが含まれているか確認します。ブーリアン値を返します。
         if(ele1.classList.contains("d-block")){
             displayNone(ele1);
             displayBlock(ele2);
