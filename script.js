@@ -158,39 +158,46 @@ const camera =
     }]
 ;
 
-class Battery{
-    //         (id , 名前, 容量,      電圧,     最大放電電流(A), 終始電圧)
-    constructor(id, name, capacityAh, voltage, maxDraw, endVoltage ){
-        this.id = id;
-        this.name = name;
-        this.capacityA = capacityAh * 3600;
-        this.voltage = voltage;
-        this.maxDraw = maxDraw;
-        this.endVoltage = endVoltage;
-    }
-}
+// class Battery{
+//     //          (名前,   容量,      電圧,    最大放電電流(A), 終始電圧)
+//     constructor(name, capacityAh, voltage, maxDraw, endVoltage ){
+//         this.id = null;
+//         this.name = name;
+//         this.capacityA = capacityAh * 3600;
+//         this.voltage = voltage;
+//         this.maxDraw = maxDraw;
+//         this.endVoltage = endVoltage;
+//     }
+// }
 
-class Camera{
-    //         (id, ブランド、モデル,消費電力(wh))
-    constructor(id, brand, model, powerConsumptionWh){
-        this.id = id;
-        this.brand = brand;
-        this.model = model;
-        this.powerConsumptionW = powerConsumptionWh * 3600;
-    }
-}
+// class Camera{
+//     //         ( ブランド、モデル,消費電力(wh))
+//     constructor(brand, model, powerConsumptionWh){
+//         this.id = null;
+//         this.brand = brand;
+//         this.model = model;
+//         this.powerConsumptionW = powerConsumptionWh * 3600;
+//     }
+// }
 class Model{
     table = {};
     idCounter = 0;
-    
-    addAll(arr){
 
+    addAll(objArr){
+        objArr.forEach(obj => {
+            obj.id = this.idCounter;
+            this.table[this.idCounter] = obj;
+            this.idCounter++; 
+        });
     }
+
     add(obj){
-        
+        obj.id = this.idCounter;
+        this.table[this.idCounter] = obj;
+        this.idCounter++;
     }
     get(id){
-
+        return this.table[id];
     }
 }
 
@@ -337,19 +344,7 @@ class View {
 
 class Controller{
     target = document.querySelector("body");
-    // <header class="p-2 bg-dark">
-    //     <h2 class="white" >Battery Finder Program</h2>
-    // </header>
-    // <main>
-    //     <section id="mainPage" class="container shadow my-5 py-3">
-    //     </section>
-    //     <section id="extraPage" class="container shadow my-5 py-3">
-    //     </section>
-    // </main>
-    // <footer class="mt-auto mb-5 p-3">
-    // </footer>
     
-    //main   = document.querySelector("main");//???
 
     displayNone(ele){
         ele.classList.remove("d-block");
@@ -376,8 +371,8 @@ class Controller{
     getContinuationPerHour(capacityW, powerConsumptionW){
         return Math.ceil(capacityW / powerConsumptionW);
     }
+
     top(){
-        //View.main()
         //contentEle取得
         //brandSelect設置
         //modelSelect設置
