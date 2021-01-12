@@ -158,6 +158,7 @@ const camera =
     }]
 ;
 
+//この二つのクラス必要ないかもしれないのでコメントアウトしておく
 // class Battery{
 //     //          (名前,   容量,      電圧,    最大放電電流(A), 終始電圧)
 //     constructor(name, capacityAh, voltage, maxDraw, endVoltage ){
@@ -190,7 +191,6 @@ class Model{
             this.idCounter++; 
         });
     }
-
     add(obj){
         obj.id = this.idCounter;
         this.table[this.idCounter] = obj;
@@ -223,7 +223,6 @@ class View {
 
         return bodyHtml;
     }
-
     selecterHtml(labelTitle,models){
         let selecerHtml = 
         `
@@ -233,18 +232,24 @@ class View {
                         <h2>${labelTitle}</h2>
                     </div>
                     <div class="col-12 mt-3">
-                        <button type="button" class="col-12 col-md-6 p-3 item-left btn btn-lg btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-2vw ">Model</span>
-                        </button>
-                        <div id="${models}Selecter" class="dropdown-menu col-11" aria-labelledby="dropdownMenuButton">
-                            <div class="dropdown-item text-2vw">Model</div>
-                            <div class="dropdown-item text-2vw">Another action</div>
-                            <div class="dropdown-item text-2vw">Something else here</div>
-                        </div>
+                        <select id="brandSelect" class="custom-select col-12 col-md-6 p-3 text-2vw" >
+                            <option class="p-3 text-2vw" selected>Choose...</option>
+        `
+        for(let i = 0 ; i < models.length ; i++){
+            
+            selecerHtml += 
+            `
+                <option class="p-3 text-2vw" value="">One</option>                
+            `;
+        }
+
+        selecerHtml += 
+        `
+                        </select>
                     </div>
                 </div>
             </div>
-        `;
+        `
 
         return selecerHtml;
     }
@@ -256,9 +261,9 @@ class View {
                     <div class="col-12">
                         <h2 class="">${labelTitle}</h2>
                     </div>
-                    <div class="col-12 mt-3  d-flex">
-                        <input id="${unit}Input" type="text" class="col-3 col-md-1 bg-gray text-2vw p-1" value="0">
-                        <span class="ml-2 text-2vw">${unit}</span>
+                    <div class="col-12 mt-3  input-group d-flex">
+                        <input type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
+                        <span class="ml-2 text-2vw align-self-end">${unit}</span>
                     </div>
                 </div>
             </div>
@@ -266,7 +271,6 @@ class View {
 
         return parameterInputHtml;
     }
-
     listHtml(labelTitle,theadList,modelList,f){
         // let listHtml = 
         // `
@@ -323,7 +327,6 @@ class View {
 
         // return listHtml;
     }
-
     page404Html(){
         let page404Html = 
         `
@@ -364,14 +367,12 @@ class Controller{
             displayBlock(ele1);
         }
     }
-    
     getW(v,a){
         return v * a;
     }
     getContinuationPerHour(capacityW, powerConsumptionW){
         return Math.ceil(capacityW / powerConsumptionW);
     }
-
     top(){
         //contentEle取得
         //brandSelect設置

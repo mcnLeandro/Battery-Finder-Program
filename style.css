@@ -12,5 +12,8 @@ h2{
 .text-2vw{
     font-size: 2vw;
 }
+.custom-select ,.form-control{
+    height: 100%;
+}
 
 .white{color: white;}
