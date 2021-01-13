@@ -1,5 +1,6 @@
 //battery = [{},{},{},{}];
 //camera  = [{},{},{},{}];
+//brand   = [{},{},{},{}];
 const battery =
     [{
         "batteryName": "WKL-78",
@@ -79,130 +80,217 @@ const battery =
         "endVoltage": 12,
     }]
 ;
-
 const camera =
     [{
-        "brand": "Cakon",
+        "brand_id": 1,
         "model": "ABC 3000M",
         "powerConsumptionWh": 35.5,
     },
     {
-        "brand": "Cakon",
+        "brand_id": 1,
         "model": "ABC 5000M",
         "powerConsumptionWh": 37.2,
     },
     {
-        "brand": "Cakon",
+        "brand_id": 1,
         "model": "ABC 7000M",
         "powerConsumptionWh": 39.7,
     },
     {
-        "brand": "Cakon",
+        "brand_id": 1,
         "model": "ABC 9000M",
         "powerConsumptionWh": 10.9,
     },
     {
-        "brand": "Cakon",
+        "brand_id": 1,
         "model": "ABC 9900M",
         "powerConsumptionWh": 15.7,
     },
     {
-        "brand": "Go MN",
+        "brand_id": 2,
         "model": "UIK 110C",
         "powerConsumptionWh": 62.3,
     },
     {
-        "brand": "Go MN",
+        "brand_id": 2,
         "model": "UIK 210C",
         "powerConsumptionWh": 64.3,
     },
     {
-        "brand": "Go MN",
+        "brand_id": 2,
         "model": "UIK 230C",
         "powerConsumptionWh": 26.3,
     },
     {
-        "brand": "Go MN",
+        "brand_id": 2,
         "model": "UIK 250C",
         "powerConsumptionWh": 15.3,
     },
     {
-        "brand": "Go MN",
+        "brand_id": 2,
         "model": "UIK 270C",
         "powerConsumptionWh": 20.3,
     },
     {
-        "brand": "VANY",
+        "brand_id": 3,
         "model": "CEV 1100P",
         "powerConsumptionWh": 22,
     },
     {
-        "brand": "VANY",
+        "brand_id": 3,
         "model": "CEV 1300P",
         "powerConsumptionWh": 23,
     },
     {
-        "brand": "VANY",
+        "brand_id": 3,
         "model": "CEV 1500P",
         "powerConsumptionWh": 24,
     },
     {
-        "brand": "VANY",
+        "brand_id": 3,
         "model": "CEV 1700P",
         "powerConsumptionWh": 25,
     },
     {
-        "brand": "VANY",
+        "brand_id": 3,
         "model": "CEV 1900P",
         "powerConsumptionWh": 26,
     }]
 ;
+const brand = [
+    {
+        "camera_ids":[1,2,3,4,5],
+        "name":"Cakon",
+    },
+    {
+        "camera_ids":[6,7,8,9,10],
+        "name":"Go MN",
+    },
+    {
+        "camera_ids":[11,12,13,14,15],
+        "name":"VANY",
+    }]
+;
 
-//この二つのクラス必要ないかもしれないのでコメントアウトしておく
-// class Battery{
-//     //          (名前,   容量,      電圧,    最大放電電流(A), 終始電圧)
-//     constructor(name, capacityAh, voltage, maxDraw, endVoltage ){
-//         this.id = null;
-//         this.name = name;
-//         this.capacityA = capacityAh * 3600;
-//         this.voltage = voltage;
-//         this.maxDraw = maxDraw;
-//         this.endVoltage = endVoltage;
-//     }
-// }
 
-// class Camera{
-//     //         ( ブランド、モデル,消費電力(wh))
-//     constructor(brand, model, powerConsumptionWh){
-//         this.id = null;
-//         this.brand = brand;
-//         this.model = model;
-//         this.powerConsumptionW = powerConsumptionWh * 3600;
-//     }
-// }
+
+
 class Model{
-    table = {};
-    idCounter = 0;
-
-    addAll(objArr){
-        objArr.forEach(obj => {
-            obj.id = this.idCounter;
-            this.table[this.idCounter] = obj;
-            this.idCounter++; 
-        });
+    static table = {};
+    static idCounter = 1;
+  
+    constructor(id){
+      this.id = id;
     }
-    add(obj){
-        obj.id = this.idCounter;
-        this.table[this.idCounter] = obj;
-        this.idCounter++;
+  
+    static getClassName(){
+      return this.name;
     }
-    get(id){
-        return this.table[id];
+    static initializeTable(key){
+      this.table[key] = {};
+    }
+    static add(obj){
+  
+      let i = this.idCounter++;
+      let className = this.getClassName();
+  
+      if(!this.table[className])this.initializeTable(className);
+  
+      obj.id = i;
+      this.table[className][i] = obj;
+  
+    }
+    static find(id){
+  
+      let className = this.getClassName();
+      return this.table[className][id] 
+  
     }
 }
 
+
+
+//必要になったので復活
+class Battery extends Model{
+    //          (名前,   容量,      電圧,    最大放電電流(A), 終始電圧)
+    constructor(id, name, capacityAh, voltage, maxDraw, endVoltage ){
+      super(id);
+      this.name = name;
+      this.capacityA = capacityAh * 3600;
+      this.voltage = voltage;
+      this.maxDraw = maxDraw;
+      this.endVoltage = endVoltage;
+    }
+}
+class Camera extends Model{
+    //         ( ブランドid、モデル,消費電力(wh))
+    constructor(id, brand_id, model, powerConsumptionWh){
+      super(id);
+      this.brand_id = brand_id;
+      this.model = model;
+      this.powerConsumptionW = powerConsumptionWh * 3600;
+    }
+}
+class Brand extends Model{
+    constructor(id, camera_ids, name){
+      super(id);
+      this.camera_ids = camera_ids;
+      this.name = name;
+  
+    }
+}
+
+
+
+
+//battery初期化
+for (let i = 0; i < battery.length; i++) {
+    let currObj = battery[i];
+  
+    let batteryName = currObj["batteryName"];
+    let capacityAh = currObj["capacityAh"];
+    let voltage = currObj["voltage"];
+    let maxDraw = currObj["maxDraw"];
+    let endVoltage = currObj["endVoltage"];
+  
+    let newBttery = new Battery(null, batteryName, capacityAh, voltage, maxDraw, endVoltage);
+    
+    Battery.add(newBttery);
+}
+//camera初期化
+for (let i = 0; i < camera.length; i++) {
+    let currObj = camera[i];
+
+    let brand_id = currObj["brand_id"];
+    let model = currObj["model"];
+    let powerConsumptionWh = currObj["powerConsumptionWh"];
+
+    let newCamera = new Camera(null, brand_id, model, powerConsumptionWh);
+
+    Camera.add(newCamera);
+}
+//brand初期化
+for (let i = 0; i < brand.length; i++) {
+    let currObj = brand[i];
+
+    let camera_ids = currObj["camera_ids"];
+    let name = currObj["name"];
+
+    let newBrand = new Brand(null, camera_ids, name);
+
+    Brand.add(newBrand);
+}
+
+console.log(Model.table)
+
+
+
+
+
+
+
 class View {
-    bodyHtml(){
+    static bodyHtml(){
         let bodyHtml = 
         `   
             <header class="p-2 bg-dark">
