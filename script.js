@@ -206,11 +206,15 @@ class Model{
       return this.table[className][id] 
   
     }
+    static all(){
+        let className = this.getClassName();
+        return this.table[className]
+    }
 }
 
 
 
-//必要になったので復活
+
 class Battery extends Model{
     //          (名前,   容量,      電圧,    最大放電電流(A), 終始電圧)
     constructor(id, name, capacityAh, voltage, maxDraw, endVoltage ){
