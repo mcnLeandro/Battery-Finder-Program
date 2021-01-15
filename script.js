@@ -294,16 +294,14 @@ console.log(Model.table)
 
 
 class View {
-    static bodyHtml(){
+    static initializePageHtml(){
         let bodyHtml = 
         `   
-            <header class="p-2 bg-dark">
+            <header class="p-3 bg-dark">
                 <h2 class="white" >Battery Finder Program</h2>
             </header>
             <main>
-                <section id="mainPage" class="container shadow my-5 py-3">
-                </section>
-                <section id="extraPage" class="container shadow my-5 py-3 d-none">
+                <section id="mainSection" class="container shadow my-5 py-3">
                 </section>
             </main>
             <footer class="mt-auto mb-5 p-3">
@@ -315,8 +313,8 @@ class View {
 
         return bodyHtml;
     }
-    selecterHtml(labelTitle,models){
-        let selecerHtml = 
+    static selecterHtml(labelTitle, models, column){
+        let selecterHtml = 
         `
             <div class="row mt-5">
                 <div class=" col-12">
@@ -327,15 +325,16 @@ class View {
                         <select id="brandSelect" class="custom-select col-12 col-md-6 p-3 text-2vw" >
                             <option class="p-3 text-2vw" selected>Choose...</option>
         `
-        for(let i = 0 ; i < models.length ; i++){
-            
-            selecerHtml += 
+        Object.keys(models).map(key => {
+            console.log(models)
+            let data = models[key][column]; 
+            selecterHtml += 
             `
-                <option class="p-3 text-2vw" value="">One</option>                
+                <option class="p-3 text-2vw" value="${data}">${data}</option>                
             `;
-        }
+        });
 
-        selecerHtml += 
+        selecterHtml += 
         `
                         </select>
                     </div>
@@ -343,9 +342,9 @@ class View {
             </div>
         `
 
-        return selecerHtml;
+        return selecterHtml;
     }
-    parameterInputHtml(labelTitle,unit){
+    static parameterInputHtml(labelTitle, unit){
         let parameterInputHtml = 
         `
             <div class="row mt-5">
@@ -363,7 +362,7 @@ class View {
 
         return parameterInputHtml;
     }
-    listHtml(labelTitle,theadList,modelList,f){
+    static listHtml(labelTitle, theadList, modelList,f){
         // let listHtml = 
         // `
         //     <div class="row mt-5">
@@ -419,7 +418,7 @@ class View {
 
         // return listHtml;
     }
-    page404Html(){
+    static notFound404Html(){
         let page404Html = 
         `
             <div class="d-flex justify-content-center text-center">
@@ -428,7 +427,7 @@ class View {
                     <h2>NOT FOUND</h2>
                     <p>Soory.<br> This page doesn't exsit yet, so go back to top page, and enjoy the rest of application service :)</p>
 
-                    <button type="button" class="btn btn-primary w-100 my-3">top page</button>
+                    <button type="button" class="col-12 col-md-6 btn btn-primary w-100 my-3">top page</button>
                 </div>
             </div>
         `;
