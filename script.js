@@ -220,10 +220,17 @@ class Battery extends Model{
     constructor(id, name, capacityAh, voltage, maxDraw, endVoltage ){
       super(id);
       this.name = name;
-      this.capacityA = capacityAh * 3600;
+      this.capacityAh = capacityAh;
       this.voltage = voltage;
       this.maxDraw = maxDraw;
       this.endVoltage = endVoltage;
+    }
+
+    getW(v,a){
+        return  v* a;
+    }
+    getContinuationPerHour(capacityW, powerConsumptionW){
+        return Math.ceil(capacityW / powerConsumptionW);
     }
 }
 class Camera extends Model{
@@ -232,7 +239,7 @@ class Camera extends Model{
       super(id);
       this.brand_id = brand_id;
       this.model = model;
-      this.powerConsumptionW = powerConsumptionWh * 3600;
+      this.powerConsumptionWh = powerConsumptionWh;
     }
 }
 class Brand extends Model{
@@ -362,61 +369,54 @@ class View {
 
         return parameterInputHtml;
     }
-    static listHtml(labelTitle, theadList, modelList,f){
-        // let listHtml = 
-        // `
-        //     <div class="row mt-5">
-        //         <div class=" col-12">
-        //             <div class="col-12">
-        //                 <h2 class="">${labelTitle}</h2>
-        //             </div>
-        //             <div class="col-12 mt-3  d-flex text-2vw">
-        //                 <table class="table table-striped col-12">
-        //                     <thead>
-        //                       <tr>
-        // `;
-        // for(let i = 0 ; i < theadList.length ; i++){
+    //listHTMLは残念ながら使い回し不可の予感
+    static listHtml(labelTitle, model,f){
+        let listHtml = 
+        `
+            <div class="row mt-5">
+                <div class=" col-12">
+                    <div class="col-12">
+                        <h2 class="">${labelTitle}</h2>
+                    </div>
+                    <div class="col-12 mt-3  d-flex text-2vw">
+                        <table class="table table-striped col-12">
+                        <thead>
+                            <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Lasting</th>
+                            <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+        `;
 
-        //     listHtml +=
-        //     `
-        //         <th scope="col">${theadList[i]}</th>
-        //     `;
-
-        // }
-
-        // listHtml += 
-        // `
-        //     </tr>
-        // </thead>
-        // <tbody>
-        //     <tr>
-        // `;
-
-        // for(let i = 0 ; i < modelList ; i++){
-        //     let currObj = modelList()
-        //     if(!f)continue;
-        //     listHtml += 
-            
-        //     `              
-        //         <th scope="row">1</th>
-        //         <td>Mark</td>
-        //         <td>Otto</td>
-        //         <td><button type="button" class="btn btn-primary">Show</button></td>
-            
-        //     `
-        // }
         
-        // listHtml+=
-        // `
-        //                       </tr>
-        //                     </tbody>
-        //                   </table>
-        //             </div>
-        //         </div>
-        //     </div>
-        // `
+        Object.keys(model).map(function(key){
 
-        // return listHtml;
+            listHtml += 
+            
+            `              
+                <th scope="row">${model[key]["id"]}</th>
+                <td>${model[key]["name"]}</td>
+                <td>${f(model[key])}</td>
+                <td><button type="button" class="btn btn-primary">Show</button></td>
+                </tr>
+            `
+        })
+        
+        listHtml+=
+        `
+                             
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+        `
+
+        return listHtml;
     }
     static notFound404Html(){
         let page404Html = 
@@ -436,43 +436,49 @@ class View {
     }
 }
 
+
+
+
 class Controller{
-    target = document.querySelector("body");
-    
 
-    displayNone(ele){
-        ele.classList.remove("d-block");
-        ele.classList.add("d-none");
+    static target = {
+        "body" : document.querySelector("#body"),
+        "mainSection" : document.querySelector("#mainSection") 
     }
-    displayBlock(ele){
-        ele.classList.remove("d-none");
-        ele.classList.add("d-block");
+    static refreshTarget(){
+
+        this.target["body"] = document.querySelector("#body")
+        this.target["mainSection"] = document.querySelector("#mainSection")
+
     }
-    toggleDisplay(ele1, ele2){
-        if(ele1.classList.contains("d-block")){
-            displayNone(ele1);
-            displayBlock(ele2);
+    static initializePage(){
+
+        if(!this.target["mainSection"]) {
+            this.target["body"].innerHTML = View.initializePageHtml();
+            this.refreshTarget()
         }
-        else{
-            displayNone(ele2);
-            displayBlock(ele1);
-        }
-    }
-    getW(v,a){
-        return v * a;
-    }
-    getContinuationPerHour(capacityW, powerConsumptionW){
-        return Math.ceil(capacityW / powerConsumptionW);
-    }
-    top(){
-        //contentEle取得
-        //brandSelect設置
-        //modelSelect設置
-        //paramaterInput設置
-        //table設置
 
-        //ここまででviewは完成するけどEventの設定がまだ。
     }
+    static top(){
+        let step1 = "step1 : Select Your Brand"
+        let step2 = "step2 : Select Your Model"
+        let step3 = "step3 : Input Accessory Power Comsumption"
+        let step4 = "step4: Choose Your Battery"
 
+        this.initializePage()
+        this.target["mainSection"].innerHTML += View.selecterHtml(step1, Brand.all(), "name")
+        this.target["mainSection"].innerHTML += View.selecterHtml(step2, Camera.all(), "model")
+        this.target["mainSection"].innerHTML += View.parameterInputHtml(step3,"w")
+        this.target["mainSection"].innerHTML += View.listHtml(step4, Battery.all())
+
+        
+
+    }
+    static notFound404(){
+        this.target["mainSection"].innerHTML = View.notFound404Html()
+    }
 }
 
+
+
+Controller.top()
