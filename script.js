@@ -320,7 +320,7 @@ class View {
 
         return bodyHtml;
     }
-    static selecterHtml(labelTitle, models, column){
+    static selecterHtml(id,labelTitle, models, column){
         let selecterHtml = 
         `
             <div class="row mt-5">
@@ -329,7 +329,7 @@ class View {
                         <h2>${labelTitle}</h2>
                     </div>
                     <div class="col-12 mt-3">
-                        <select id="brandSelect" class="custom-select col-12 col-md-6 p-3 text-2vw" >
+                        <select id="${id}" class="custom-select col-12 col-md-6 p-3 text-2vw" >
                             <option class="p-3 text-2vw" selected>Choose...</option>
         `
         Object.keys(models).map(key => {
@@ -351,7 +351,7 @@ class View {
 
         return selecterHtml;
     }
-    static parameterInputHtml(labelTitle, unit){
+    static parameterInputHtml(id,labelTitle, unit){
         let parameterInputHtml = 
         `
             <div class="row mt-5">
@@ -360,7 +360,7 @@ class View {
                         <h2 class="">${labelTitle}</h2>
                     </div>
                     <div class="col-12 mt-3  input-group d-flex">
-                        <input type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
+                        <input id="${id}"type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
                         <span class="ml-2 text-2vw align-self-end">${unit}</span>
                     </div>
                 </div>
@@ -437,20 +437,30 @@ class View {
 }
 
 
+class Target{
+    static target = {
+        "body" : document.getElementById("body"),
+        "mainSection" : document.getElementById("mainSection"), 
+    }
 
+    static refreshTarget(){
+        Object.keys(this.target).forEach(key => {
+            this.target[key] = document.getElementById(key)
+        })
+    }
+    static add(id){
+        if(!this.target[id]){
+          this.target[id] = document.getElementById(id);
+        }
+    }
+    static get(id){
+        return this.target[id]
+    }
+}
 
 class Controller{
 
-    static target = {
-        "body" : document.querySelector("#body"),
-        "mainSection" : document.querySelector("#mainSection") 
-    }
-    static refreshTarget(){
-
-        this.target["body"] = document.querySelector("#body")
-        this.target["mainSection"] = document.querySelector("#mainSection")
-
-    }
+    
     static initializePage(){
 
         if(!this.target["mainSection"]) {
@@ -460,16 +470,21 @@ class Controller{
 
     }
     static top(){
+        let step1Id = "brandSelect"
+        let step2Id = "step2 : Select Your Model"
+        let step3Id = "step3 : Input Accessory Power Comsumption"
+        let step4Id = "show"
+
         let step1 = "step1 : Select Your Brand"
         let step2 = "step2 : Select Your Model"
         let step3 = "step3 : Input Accessory Power Comsumption"
         let step4 = "step4: Choose Your Battery"
 
         this.initializePage()
-        this.target["mainSection"].innerHTML += View.selecterHtml(step1, Brand.all(), "name")
-        this.target["mainSection"].innerHTML += View.selecterHtml(step2, Camera.all(), "model")
-        this.target["mainSection"].innerHTML += View.parameterInputHtml(step3,"w")
-        this.target["mainSection"].innerHTML += View.listHtml(step4, Battery.all())
+        this.target["mainSection"].innerHTML += View.selecterHtml(step1Id,step1, Brand.all(), "name")
+        this.target["mainSection"].innerHTML += View.selecterHtml(step2Id,step2, Camera.all(), "model")
+        this.target["mainSection"].innerHTML += View.parameterInputHtml(step3Id,step3,"w")
+        // this.target["mainSection"].innerHTML += View.listHtml(step4Id,step4, Battery.all())
 
         
 
