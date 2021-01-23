@@ -437,13 +437,13 @@ class View {
 }
 
 
-class Target{
+class Ele{
     static target = {
         "body" : document.getElementById("body"),
         "mainSection" : document.getElementById("mainSection"), 
     }
 
-    static refreshTarget(){
+    static refresh(){
         Object.keys(this.target).forEach(key => {
             this.target[key] = document.getElementById(key)
         })
@@ -463,16 +463,16 @@ class Controller{
     
     static initializePage(){
 
-        if(!this.target["mainSection"]) {
-            this.target["body"].innerHTML = View.initializePageHtml();
-            this.refreshTarget()
+        if(!Ele.get("body")) {
+            Ele.get("body").innerHTML = View.initializePageHtml();
+            Ele.refresh()
         }
 
     }
     static top(){
         let step1Id = "brandSelect"
-        let step2Id = "step2 : Select Your Model"
-        let step3Id = "step3 : Input Accessory Power Comsumption"
+        let step2Id = "modelSelect"
+        let step3Id = "paramaterInput"
         let step4Id = "show"
 
         let step1 = "step1 : Select Your Brand"
