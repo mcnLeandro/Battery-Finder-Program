@@ -159,15 +159,15 @@ const camera =
 ;
 const brand = [
     {
-        "camera_ids":[1,2,3,4,5],
+        "camera_ids":{ 1:1, 2:2, 3:3, 4:4, 5:5 },
         "name":"Cakon",
     },
     {
-        "camera_ids":[6,7,8,9,10],
+        "camera_ids":{ 6:6, 7:6, 8:6, 9:6, 10:10 },
         "name":"Go MN",
     },
     {
-        "camera_ids":[11,12,13,14,15],
+        "camera_ids":{ 11:11, 12:12, 13:13, 14:14, 15:15 },
         "name":"VANY",
     }]
 ;
@@ -267,6 +267,7 @@ for (let i = 0; i < battery.length; i++) {
     let newBttery = new Battery(null, batteryName, capacityAh, voltage, maxDraw, endVoltage);
     
     Battery.add(newBttery);
+  
 }
 //camera初期化
 for (let i = 0; i < camera.length; i++) {
@@ -279,6 +280,7 @@ for (let i = 0; i < camera.length; i++) {
     let newCamera = new Camera(null, brand_id, model, powerConsumptionWh);
 
     Camera.add(newCamera);
+  
 }
 //brand初期化
 for (let i = 0; i < brand.length; i++) {
@@ -290,6 +292,7 @@ for (let i = 0; i < brand.length; i++) {
     let newBrand = new Brand(null, camera_ids, name);
 
     Brand.add(newBrand);
+    
 }
 
 console.log(Model.table)
@@ -339,13 +342,13 @@ class View {
         `
             <div class="col-12 mt-3">
                 <select id="${id}" class="custom-select col-12 col-md-6 p-3 text-2vw" >
-                    <option class="p-3 text-2vw" selected>Choose...</option>
+                    <option class="p-3 text-2vw" >Choose...</option>
         `
         Object.keys(models).map(key => {
-            let data = models[key][column]; 
+            let data = models[key][column];
             selecterHtml += 
             `
-                <option class="p-3 text-2vw" value="${data}" ${data == value? "selected":""}>${data}</option>                
+                <option class="p-3 text-2vw" value="${key}" ${key == value? "selected":""}>${data}</option>                
             `;
         });
 
@@ -499,23 +502,39 @@ class Controller{
 
 
         Ele.get(id1).addEventListener("mouseleave", function(){
+            
             Ele.refresh(id1);
             if(Ele.get(id1).value != value1){
-                Controller.top(
-                    objs1, Ele.get(id1).value,
-                    objs2, value2
-                );
+
+                if(Ele.get(id1).value == "Choose..."){
+
+                    Controller.top(
+                        Brand.all() , null,
+                        Camera.all(), null,
+                    )
+
+                }
+                else{
+
+                    let id = Ele.get(id1).value
+                    let newObjs = {};
+
+                    Object.keys(Brand.find(id).camera_ids).forEach(key => {
+                        newObjs[key] = Camera.find(key)
+                    });
+                    
+                    Controller.top(
+                        objs1, Ele.get(id1).value,
+                        newObjs, value2
+                    );
+
+                }
+
             }
 
         });
 
-        Ele.get(step2).addEventListener("mouseleave", function(){
-            
-            
-            
-            
-        });   
-        Ele.get(step3).addEventListener("",function(){
+        Ele.get(id3).addEventListener("",function(){
 
         })
         
