@@ -333,7 +333,6 @@ class View {
                             <option class="p-3 text-2vw" selected>Choose...</option>
         `
         Object.keys(models).map(key => {
-            console.log(models)
             let data = models[key][column]; 
             selecterHtml += 
             `
@@ -443,10 +442,13 @@ class Ele{
         "mainSection" : document.getElementById("mainSection"), 
     }
 
-    static refresh(){
+    static refreshAll(){
         Object.keys(this.target).forEach(key => {
             this.target[key] = document.getElementById(key)
         })
+    }
+    static refresh(id){
+        this.target[key] = document.getElementById(id)
     }
     static add(id){
         if(!this.target[id]){
@@ -463,29 +465,46 @@ class Controller{
     
     static initializePage(){
 
-        if(!Ele.get("body")) {
-            Ele.get("body").innerHTML = View.initializePageHtml();
-            Ele.refresh()
-        }
+        Ele.get("body").innerHTML = View.initializePageHtml();
+        Ele.refreshAll()
 
     }
-    static top(){
-        let step1Id = "brandSelect"
-        let step2Id = "modelSelect"
-        let step3Id = "paramaterInput"
-        let step4Id = "show"
-
-        let step1 = "step1 : Select Your Brand"
-        let step2 = "step2 : Select Your Model"
-        let step3 = "step3 : Input Accessory Power Comsumption"
-        let step4 = "step4: Choose Your Battery"
+    static top( id1, title1, objs1, col1, id2, title2, objs2, col2 ){
+        
 
         this.initializePage()
-        this.target["mainSection"].innerHTML += View.selecterHtml(step1Id,step1, Brand.all(), "name")
-        this.target["mainSection"].innerHTML += View.selecterHtml(step2Id,step2, Camera.all(), "model")
-        this.target["mainSection"].innerHTML += View.parameterInputHtml(step3Id,step3,"w")
-        // this.target["mainSection"].innerHTML += View.listHtml(step4Id,step4, Battery.all())
 
+        Ele.get("mainSection").innerHTML += View.selecterHtml(id1,title1, objs1, col1)
+        Ele.get("mainSection").innerHTML += View.selecterHtml(id2,title2, objs2, col2)
+        Ele.get("mainSection").innerHTML += View.parameterInputHtml(id3,title3,"w")
+        
+        Ele.add(id1);
+        Ele.add(id2);
+        Ele.add(id3);
+            
+
+
+        Ele.get(id1).addEventListener("mouseleave", function(){
+            Ele.refreshAll()
+            
+            if(Ele.get(id1).value != "Choose..."){
+            }
+
+        });
+
+        Ele.get(step2).addEventListener("mouseleave", function(){
+            
+            
+            
+            
+        });   
+        Ele.get(step3).addEventListener("",function(){
+
+        })
+        
+        // this.target["mainSection"].innerHTML += View.listHtml(step4,step4Title, Battery.all())
+        
+        
         
 
     }
@@ -494,6 +513,24 @@ class Controller{
     }
 }
 
+let id1 = "brandSelect"
+let id2 = "modelSelect"
+let id3 = "paramaterInput"
+let id4 = "show"
 
+let title1 = "step1 : Select Your Brand"
+let title2 = "step2 : Select Your Model"
+let title3 = "step3 : Input Accessory Power Comsumption"
+let title4 = "step4: Choose Your Battery"
 
-Controller.top()
+let objs1 = Brand.all()
+let objs2 = Camera.all()
+let objs3 = null;
+
+let col1 = "name";
+let col2 = "model";
+
+Controller.top(
+    id1, title1, objs1, col1,
+    id2, title2, objs2, col2
+)
