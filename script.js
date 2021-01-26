@@ -302,13 +302,14 @@ console.log(Model.table)
 
 class View {
     static initializePageHtml(){
+
         let bodyHtml = 
         `   
             <header class="p-3 bg-dark">
                 <h2 class="white" >Battery Finder Program</h2>
             </header>
             <main>
-                <section id="mainSection" class="container shadow my-5 py-3">
+                <section id="main" class="container shadow my-5 py-3">
                 </section>
             </main>
             <footer class="mt-auto mb-5 p-3">
@@ -319,18 +320,26 @@ class View {
         `;
 
         return bodyHtml;
+
     }
-    static selecterHtml(id,labelTitle, models, column){
+    static h2(title){
+
+        let h2Html = 
+        `
+            <div class="col-12 mt-3">
+                <h2>${title}</h2>
+            </div>
+        `
+        return h2Html;
+
+    }
+    static selecter(id, models, column){
+
         let selecterHtml = 
         `
-            <div class="row mt-5">
-                <div class=" col-12">
-                    <div class="col-12">
-                        <h2>${labelTitle}</h2>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <select id="${id}" class="custom-select col-12 col-md-6 p-3 text-2vw" >
-                            <option class="p-3 text-2vw" selected>Choose...</option>
+            <div class="col-12 mt-3">
+                <select id="${id}" class="custom-select col-12 col-md-6 p-3 text-2vw" >
+                    <option class="p-3 text-2vw" selected>Choose...</option>
         `
         Object.keys(models).map(key => {
             let data = models[key][column]; 
@@ -342,82 +351,74 @@ class View {
 
         selecterHtml += 
         `
-                        </select>
-                    </div>
-                </div>
+                </select>
             </div>
+            
         `
 
         return selecterHtml;
+
     }
-    static parameterInputHtml(id,labelTitle, unit){
+    static parameterInput(id, unit){
+
         let parameterInputHtml = 
         `
-            <div class="row mt-5">
-                <div class=" col-12">
-                    <div class="col-12">
-                        <h2 class="">${labelTitle}</h2>
-                    </div>
-                    <div class="col-12 mt-3  input-group d-flex">
-                        <input id="${id}"type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
-                        <span class="ml-2 text-2vw align-self-end">${unit}</span>
-                    </div>
-                </div>
+            
+            <div class="col-12 mt-3  input-group d-flex">
+                <input id="${id}"type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
+                <span class="ml-2 text-2vw align-self-end">${unit}</span>
             </div>
         `;
 
         return parameterInputHtml;
+        
     }
     //listHTMLは残念ながら使い回し不可の予感
-    static listHtml(labelTitle, model,f){
-        let listHtml = 
+    static table(model,f){
+
+        let tableHtml = 
         `
-            <div class="row mt-5">
-                <div class=" col-12">
-                    <div class="col-12">
-                        <h2 class="">${labelTitle}</h2>
-                    </div>
-                    <div class="col-12 mt-3  d-flex text-2vw">
-                        <table class="table table-striped col-12">
-                        <thead>
-                            <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Lasting</th>
-                            <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+            <div class="col-12 mt-3  d-flex text-2vw">
+                <table class="table table-striped col-12">
+                <thead>
+                    <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Lasting</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
         `;
 
         
         Object.keys(model).map(function(key){
 
-            listHtml += 
+            tableHtml += 
             
-            `              
-                <th scope="row">${model[key]["id"]}</th>
-                <td>${model[key]["name"]}</td>
-                <td>${f(model[key])}</td>
-                <td><button type="button" class="btn btn-primary">Show</button></td>
+            `
+                <tr>  
+                    <th scope="row">${model[key]["id"]}</th>
+                    <td>${model[key]["name"]}</td>
+                    <td>${f(model[key])}</td>
+                    <td><button type="button" class="btn btn-primary">Show</button></td>
                 </tr>
             `
         })
         
-        listHtml+=
+        tableHtml+=
         `
                              
-                            </tbody>
-                          </table>
-                    </div>
-                </div>
+                    </tbody>
+                    </table>
             </div>
         `
 
-        return listHtml;
+        return tableHtml;
+
     }
-    static notFound404Html(){
+    static notFound404(){
+
         let page404Html = 
         `
             <div class="d-flex justify-content-center text-center">
@@ -432,6 +433,7 @@ class View {
         `;
 
         return page404Html;
+
     }
 }
 
@@ -439,7 +441,7 @@ class View {
 class Ele{
     static target = {
         "body" : document.getElementById("body"),
-        "mainSection" : document.getElementById("mainSection"), 
+        "main" : document.getElementById("main"), 
     }
 
     static refreshAll(){
@@ -469,18 +471,27 @@ class Controller{
         Ele.refreshAll()
 
     }
-    static top( id1, title1, objs1, col1, id2, title2, objs2, col2 ){
-        
+    static top( id1,objs1,col1,id2,objs2,col2   ){
 
         this.initializePage()
 
-        Ele.get("mainSection").innerHTML += View.selecterHtml(id1,title1, objs1, col1)
-        Ele.get("mainSection").innerHTML += View.selecterHtml(id2,title2, objs2, col2)
-        Ele.get("mainSection").innerHTML += View.parameterInputHtml(id3,title3,"w")
+        console.log(Ele.get("main"))
+        console.log(View.h2("step1 : Select Your Brand"))
+
+        Ele.get("main").innerHTML += View.h2("step1 : Select Your Brand")
+        Ele.get("main").innerHTML += View.selecter(id1,objs1, col1)
+
+        Ele.get("main").innerHTML += View.h2("step2 : Select Your Model")
+        Ele.get("main").innerHTML += View.selecter(id2, objs2, col2)
+
+        // Ele.get("main").innerHTML += View.h2("step3 : Input Accessory Power Comsumption")
+        // Ele.get("main").innerHTML += View.parameterInput(id3,"w")
+
+        // Ele.get("main").innerHTML += View.h2("step4: Choose Your Battery")
         
         Ele.add(id1);
         Ele.add(id2);
-        Ele.add(id3);
+        // Ele.add(id3);
             
 
 
@@ -502,14 +513,14 @@ class Controller{
 
         })
         
-        // this.target["mainSection"].innerHTML += View.listHtml(step4,step4Title, Battery.all())
+        // this.target["main"].innerHTML += View.listHtml(step4,step4Title, Battery.all())
         
         
         
 
     }
     static notFound404(){
-        this.target["mainSection"].innerHTML = View.notFound404Html()
+        this.target["main"].innerHTML = View.notFound404()
     }
 }
 
@@ -518,10 +529,7 @@ let id2 = "modelSelect"
 let id3 = "paramaterInput"
 let id4 = "show"
 
-let title1 = "step1 : Select Your Brand"
-let title2 = "step2 : Select Your Model"
-let title3 = "step3 : Input Accessory Power Comsumption"
-let title4 = "step4: Choose Your Battery"
+
 
 let objs1 = Brand.all()
 let objs2 = Camera.all()
@@ -531,6 +539,6 @@ let col1 = "name";
 let col2 = "model";
 
 Controller.top(
-    id1, title1, objs1, col1,
-    id2, title2, objs2, col2
+    id1, objs1, col1,
+    id2, objs2, col2
 )
