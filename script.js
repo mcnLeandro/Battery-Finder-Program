@@ -333,7 +333,7 @@ class View {
         return h2Html;
 
     }
-    static selecter(id, models, column){
+    static selecter(id, models, column,value){
 
         let selecterHtml = 
         `
@@ -345,7 +345,7 @@ class View {
             let data = models[key][column]; 
             selecterHtml += 
             `
-                <option class="p-3 text-2vw" value="${data}">${data}</option>                
+                <option class="p-3 text-2vw" value="${data}" ${data == value? "selected":""}>${data}</option>                
             `;
         });
 
@@ -450,7 +450,7 @@ class Ele{
         })
     }
     static refresh(id){
-        this.target[key] = document.getElementById(id)
+        this.target[id] = document.getElementById(id)
     }
     static add(id){
         if(!this.target[id]){
@@ -471,18 +471,21 @@ class Controller{
         Ele.refreshAll()
 
     }
-    static top( id1,objs1,col1,id2,objs2,col2   ){
+    static top(objs1, value1, objs2, value2){
+
+
+        let id1 = "brandSelect"
+        let id2 = "modelSelect"
+        let id3 = "paramaterInput"
+        let id4 = "show"
 
         this.initializePage()
 
-        console.log(Ele.get("main"))
-        console.log(View.h2("step1 : Select Your Brand"))
-
         Ele.get("main").innerHTML += View.h2("step1 : Select Your Brand")
-        Ele.get("main").innerHTML += View.selecter(id1,objs1, col1)
+        Ele.get("main").innerHTML += View.selecter(id1, objs1, "name", value1)
 
         Ele.get("main").innerHTML += View.h2("step2 : Select Your Model")
-        Ele.get("main").innerHTML += View.selecter(id2, objs2, col2)
+        Ele.get("main").innerHTML += View.selecter(id2, objs2, "model", value2)
 
         // Ele.get("main").innerHTML += View.h2("step3 : Input Accessory Power Comsumption")
         // Ele.get("main").innerHTML += View.parameterInput(id3,"w")
@@ -496,9 +499,12 @@ class Controller{
 
 
         Ele.get(id1).addEventListener("mouseleave", function(){
-            Ele.refreshAll()
-            
-            if(Ele.get(id1).value != "Choose..."){
+            Ele.refresh(id1);
+            if(Ele.get(id1).value != value1){
+                Controller.top(
+                    objs1, Ele.get(id1).value,
+                    objs2, value2
+                );
             }
 
         });
@@ -524,21 +530,12 @@ class Controller{
     }
 }
 
-let id1 = "brandSelect"
-let id2 = "modelSelect"
-let id3 = "paramaterInput"
-let id4 = "show"
-
-
-
 let objs1 = Brand.all()
 let objs2 = Camera.all()
 let objs3 = null;
 
-let col1 = "name";
-let col2 = "model";
 
 Controller.top(
-    id1, objs1, col1,
-    id2, objs2, col2
+    objs1, null,
+    objs2, null,
 )
