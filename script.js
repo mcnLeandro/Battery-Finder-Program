@@ -342,7 +342,7 @@ class View {
         `
             <div class="col-12 mt-3">
                 <select id="${id}" class="custom-select col-12 col-md-6 p-3 text-2vw" >
-                    <option class="p-3 text-2vw" >Choose...</option>
+                    <option class="p-3 text-2vw" value="0">Choose...</option>
         `
         Object.keys(models).map(key => {
             let data = models[key][column];
@@ -362,13 +362,13 @@ class View {
         return selecterHtml;
 
     }
-    static parameterInput(id, unit){
+    static parameterInput(id, unit,value){
 
         let parameterInputHtml = 
         `
             
             <div class="col-12 mt-3  input-group d-flex">
-                <input id="${id}"type="text" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
+                <input id="${id}" value="${value}" type="number" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
                 <span class="ml-2 text-2vw align-self-end">${unit}</span>
             </div>
         `;
@@ -474,7 +474,7 @@ class Controller{
         Ele.refreshAll()
 
     }
-    static top(objs1, value1, objs2, value2){
+    static top(objs1, value1, objs2, value2 , objs3 ,value3){
 
 
         let id1 = "brandSelect"
@@ -490,14 +490,15 @@ class Controller{
         Ele.get("main").innerHTML += View.h2("step2 : Select Your Model")
         Ele.get("main").innerHTML += View.selecter(id2, objs2, "model", value2)
 
-        // Ele.get("main").innerHTML += View.h2("step3 : Input Accessory Power Comsumption")
-        // Ele.get("main").innerHTML += View.parameterInput(id3,"w")
+        Ele.get("main").innerHTML += View.h2("step3 : Input Accessory Power Comsumption")
+        Ele.get("main").innerHTML += View.parameterInput(id3,"w",value3)
 
         // Ele.get("main").innerHTML += View.h2("step4: Choose Your Battery")
+
         
         Ele.add(id1);
         Ele.add(id2);
-        // Ele.add(id3);
+        Ele.add(id3);
             
 
 
@@ -506,11 +507,13 @@ class Controller{
             Ele.refresh(id1);
             if(Ele.get(id1).value != value1){
 
-                if(Ele.get(id1).value == "Choose..."){
+                //データ型をそろえるためにhtmlの"Choose..."の部分のvalue属性に0を設定しています。
+                if(Ele.get(id1).value == 0){
 
                     Controller.top(
-                        Brand.all() , null,
-                        Camera.all(), null,
+                        Brand.all() , 0,
+                        Camera.all(), Ele.get(id2).value,
+                        objs3, value3
                     )
 
                 }
@@ -525,7 +528,8 @@ class Controller{
                     
                     Controller.top(
                         objs1, Ele.get(id1).value,
-                        newObjs, value2
+                        newObjs, value2,
+                        objs3, value3
                     );
 
                 }
@@ -534,7 +538,14 @@ class Controller{
 
         });
 
-        Ele.get(id3).addEventListener("",function(){
+        Ele.get(id3).addEventListener("mouseleave",function(){
+
+            Ele.refresh(id3);
+            Controller.top(
+                objs1, value1,
+                objs2, value2,
+                objs3, Ele.get(id3).value
+            );
 
         })
         
@@ -557,4 +568,5 @@ let objs3 = null;
 Controller.top(
     objs1, null,
     objs2, null,
+    objs3, null,
 )
