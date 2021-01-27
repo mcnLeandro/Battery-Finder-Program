@@ -362,13 +362,13 @@ class View {
         return selecterHtml;
 
     }
-    static parameterInput(id, unit,value){
+    static unitInput(id, unit,value){
 
         let parameterInputHtml = 
         `
             
             <div class="col-12 mt-3  input-group d-flex">
-                <input id="${id}" value="${value}" type="number" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
+                <input id="${id}" value="${value}" type="number"  max="100" min="0" class="form-control col-3 col-md-2 text-2vw p-3" placeholder="0" >
                 <span class="ml-2 text-2vw align-self-end">${unit}</span>
             </div>
         `;
@@ -491,7 +491,7 @@ class Controller{
         Ele.get("main").innerHTML += View.selecter(id2, objs2, "model", value2)
 
         Ele.get("main").innerHTML += View.h2("step3 : Input Accessory Power Comsumption")
-        Ele.get("main").innerHTML += View.parameterInput(id3,"w",value3)
+        Ele.get("main").innerHTML += View.unitInput(id3,"w",value3)
 
         // Ele.get("main").innerHTML += View.h2("step4: Choose Your Battery")
 
@@ -500,6 +500,15 @@ class Controller{
         Ele.add(id2);
         Ele.add(id3);
             
+        //総消費電力
+        // let d = Ele.get(id2).value;
+        // let a = Camera.find(d) != null? Camera.find(d).powerConsumptionWh : 0 ;
+        // let b = parseInt(value3)
+        // let c = a + b;
+        // console.log(d)
+        // console.log(a)
+        // console.log(b)
+        // console.log(c)
 
 
         Ele.get(id1).addEventListener("mouseleave", function(){
@@ -527,9 +536,9 @@ class Controller{
                     });
                     
                     Controller.top(
-                        objs1, Ele.get(id1).value,
+                        objs1  , Ele.get(id1).value,
                         newObjs, value2,
-                        objs3, value3
+                        objs3  , value3
                     );
 
                 }
@@ -538,19 +547,35 @@ class Controller{
 
         });
 
-        Ele.get(id3).addEventListener("mouseleave",function(){
+        Ele.get(id2).addEventListener("mouseleave",function(){
 
-            Ele.refresh(id3);
+            Ele.refresh(id2);
+            
             Controller.top(
                 objs1, value1,
-                objs2, value2,
-                objs3, Ele.get(id3).value
+                objs2, Ele.get(id2).value,
+                objs3, value2
             );
 
         })
-        
+        Ele.get(id3).addEventListener("mouseleave",function(){
+
+            Ele.refresh(id3);
+
+            let Inputvalue = (Ele.get(id3).value < 100)?(Ele.get(id3).value > 0)? Ele.get(id3).value: 0 : 100 ;
+            
+            Controller.top(
+                objs1, value1,
+                objs2, value2,
+                objs3, Inputvalue
+            );
+
+        })        
         // this.target["main"].innerHTML += View.listHtml(step4,step4Title, Battery.all())
         
+        
+        // let a = Camera.find(Ele.get(id1).value).powerConsumptionWh + Ele.get(id3).value
+        // console.log(a)
         
         
 
